@@ -33,4 +33,3 @@ if __name__ == '__main__':
         print('Битлинк: ', get_shortened_link(user_url, headers))
     except requests.exceptions.HTTPError:
         print('Error. Invalid URL ')
-
