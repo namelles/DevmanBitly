@@ -3,23 +3,12 @@ import requests
 import argparse
 from dotenv import load_dotenv
 from urllib.parse import urlparse
-load_dotenv()
-
-
-BITLY_TOKEN = os.getenv('BITLY_TOKEN')
-
-
-def get_username_info(headers):
-    url = 'https://api-ssl.bitly.com/v4/user'
-    response = requests.get(url, headers=headers)
-    response.raise_for_status()
-    print(response.json())
 
 
 def get_shortened_link(user_url, headers):
     url = 'https://api-ssl.bitly.com/v4/shorten'
     payload = {
-        "long_url": f"{user_url}"
+        'long_url': user_url
     }
     response = requests.post(url, headers=headers, json=payload)
     response.raise_for_status()
@@ -27,7 +16,7 @@ def get_shortened_link(user_url, headers):
 
 
 def count_click(user_url, headers):
-    parsed_url = urlparse(user_url).netloc+urlparse(user_url).path
+    parsed_url = f'{urlparse(user_url).netloc}{urlparse(user_url).path}'
     url = f'https://api-ssl.bitly.com/v4/bitlinks/{parsed_url}/clicks/summary'
     clicks_count = requests.get(url, headers=headers)
     clicks_count.raise_for_status()
@@ -35,10 +24,10 @@ def count_click(user_url, headers):
 
 
 def check_bitlink(user_url, headers):
-    parsed_url = urlparse(user_url).netloc + urlparse(user_url).path
+    parsed_url = f'{urlparse(user_url).netloc}{urlparse(user_url).path}'
     url = f'https://api-ssl.bitly.com/v4/bitlinks/{parsed_url}'
     response = requests.get(url, headers=headers)
-    return any(response.ok for resp in response)
+    return response.ok
 
 
 def create_argument_parser():
@@ -48,8 +37,11 @@ def create_argument_parser():
 
 
 if __name__ == '__main__':
+    load_dotenv()
+    bitly_token = os.getenv('BITLY_TOKEN')
+
     headers = {
-        "Authorization": f"Bearer {BITLY_TOKEN}"
+        'Authorization': f'Bearer {bitly_token}'
     }
     parser = create_argument_parser()
     url_in_argument = parser.parse_args()
