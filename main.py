@@ -1,5 +1,6 @@
 import os
 import requests
+import argparse
 from dotenv import load_dotenv
 from urllib.parse import urlparse
 load_dotenv()
@@ -40,12 +41,24 @@ def check_bitlink(user_url, headers):
     return any(response.ok for resp in response)
 
 
+def create_argument_parser():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('url', nargs='?')
+    return parser
+
+
 if __name__ == '__main__':
     headers = {
         "Authorization": f"Bearer {BITLY_TOKEN}"
     }
+    parser = create_argument_parser()
+    url_in_argument = parser.parse_args()
 
-    user_url = input('Input URL: ')
+    if url_in_argument.url:
+        user_url = url_in_argument.url
+    else:
+        user_url = input('Input URL: ')
+
     try:
         if check_bitlink(user_url, headers=headers):
             print(f'Number clicks for bitlink {user_url}: ',
