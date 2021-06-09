@@ -31,8 +31,9 @@ def check_bitlink(user_url, headers):
 
 
 def create_argument_parser():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('url', nargs='?')
+    parser = argparse.ArgumentParser(description="""Getting short links 
+                                    using the Bitley service API.""")
+    parser.add_argument('-url', help='Sends url for execution')
     return parser
 
 
@@ -44,12 +45,8 @@ if __name__ == '__main__':
         'Authorization': f'Bearer {bitly_token}'
     }
     parser = create_argument_parser()
-    url_in_argument = parser.parse_args()
-
-    if url_in_argument.url:
-        user_url = url_in_argument.url
-    else:
-        user_url = input('Input URL: ')
+    args = parser.parse_args()
+    user_url = args.url
 
     try:
         if check_bitlink(user_url, headers=headers):
