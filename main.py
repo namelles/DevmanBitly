@@ -32,7 +32,7 @@ def check_bitlink(user_url, headers):
 
 def create_argument_parser():
     parser = argparse.ArgumentParser(description="""Getting short links 
-                                    using the Bitley service API.""")
+                                    using the Bitly service API.""")
     parser.add_argument('-url', help='Sends url for execution')
     return parser
 
